@@ -99,6 +99,7 @@ button.button {
   border-color: rgba(0,0,0,0);
   line-height: 1.15rem;
   text-align: center;
+  text-decoration: none;
 
   text-shadow: none;
 

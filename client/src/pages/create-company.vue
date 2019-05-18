@@ -44,10 +44,11 @@ export default {
   computed: {
   },
   methods: {
-    createButtonHandler() {
+    async createButtonHandler() {
       if (this.$hasError()) return;
       // TODO: deploy new contract, show address to user
-      console.log('asdf');
+      const companyAddress = await this.$store.dispatch('deployNewCompany', this.company);
+      this.$router.push({ name: 'company', params: { companyAddress } });
     },
   },
 };

@@ -3,11 +3,14 @@ import Meta from 'vue-meta';
 
 import App from './app.vue';
 import router from './router';
+import store from './store';
 
 // import './lib/load-content-from-cms';
 
 // register some global components
 Vue.component('layout', require('./components/layout').default);
+Vue.component('icon', require('./components/icon').default);
+Vue.component('popup', require('./components/popup').default);
 Vue.component('markdown', require('./components/markdown').default);
 Vue.component('v-button', require('./components/forms/v-button').default);
 Vue.component('form-group', require('./components/forms/form-group').default);
@@ -32,6 +35,7 @@ window.eventBus = new Vue({});
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app');
 

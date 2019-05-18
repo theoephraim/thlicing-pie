@@ -22,6 +22,8 @@ module.exports = {
     'global-require': 'off',
     'no-plusplus': 'off',
     'radix': 'off',
+    'no-param-reassign': 'off',
+    'consistent-return': 'off',
   },
   parserOptions: {
     parser: 'babel-eslint',

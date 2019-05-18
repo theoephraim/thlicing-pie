@@ -6,7 +6,7 @@ layout#page-home
   h3 on the Ethereum blockchain
 
 
-  v-button(@click='') Create A New Company
+  v-button(to-named-route='create') Create A New Company
   v-button(@click='') Donate to this project!
 </template>
 

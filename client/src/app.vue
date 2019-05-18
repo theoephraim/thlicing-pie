@@ -12,10 +12,11 @@ export default {
     titleTemplate: '%s | Thlicing Pie',
     link: [
       { rel: 'shortcut icon', type: 'image/png', href: faviconUrl },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Playfair+Display' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Oxygen' },
     ],
   },
   mounted() {
+    this.$store.dispatch('ethers/init');
   },
 };
 </script>

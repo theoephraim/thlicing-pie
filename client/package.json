@@ -3,25 +3,29 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
     "serve": "vue-cli-service serve",
-    "lint": "vue-cli-service lint",
     "build": "vue-cli-service build",
-    "serve:dist": "http-server dist",
-    "postbuild": "react-snap"
+    "lint": "vue-cli-service lint",
+    "dev": "vue-cli-service serve",
+    "postbuild": "react-snap",
+    "serve:dist": "http-server dist"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "chart.js": "^2.8.0",
+    "es6-promisify": "^6.0.0",
+    "ethers": "^4.0.27",
     "lodash": "^4.17.11",
     "md": "^0.6.0",
     "normalize.css": "^8.0.1",
+    "p-timeout": "^2.0.1",
     "vue": "^2.6.6",
-    "vue-chartjs": "^3.4.2",
     "vue-awesome": "^2.3.8",
+    "vue-chartjs": "^3.4.2",
     "vue-meta": "^1.5.8",
     "vue-router": "^3.0.1",
-    "vuelidate": "^0.7.4"
+    "vuelidate": "^0.7.4",
+    "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",
@@ -38,6 +42,7 @@
     "less-loader": "^5.0.0",
     "react-snap": "^1.23.0",
     "sass-resources-loader": "^2.0.0",
+    "vue-cli-plugin-ethers": "^0.1.4",
     "vue-cli-plugin-pug": "^1.0.7",
     "vue-cli-plugin-svg": "^0.1.2",
     "vue-template-compiler": "^2.6.10"
