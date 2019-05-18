@@ -119,7 +119,7 @@ import { vuelidateGroupItemMixin } from '@/lib/vuelidate-group';
 
 const components = {
   'form-input-option': require('./form-input-option').default,
-  // icon: require('../general/icon').default,
+  icon: require('../icon').default,
 };
 
 // shared counter to generate unique IDs used for label + input tag binding

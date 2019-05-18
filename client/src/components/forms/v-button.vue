@@ -4,31 +4,31 @@ component.button(
   :to='routerLinkTo'
   :href='href'
   :class='classes'
-  :style='computedStyles'
   :target='targetBlank ? "_blank" : "_top"'
   :type='buttonType'
   @click='$emit("click")'
-  @mouseover='isHoverActive = true'
-  @mouseleave='isHoverActive = false'
 )
   template(v-if='loading')
-    // icon(name='spinner')
+    icon(name='spinner')
     span {{ this.loadingText }}
   template(v-else)
-    // icon(v-if='icon' :name='icon')
+    icon(v-if='icon' :name='icon')
     slot
 </template>
 
 <script>
 // NOTE: we can't call it "button" due to name collision with the native html button
 
-import tinycolor from 'tinycolor2';
-
 const components = {
-  // icon: require('./icon').default,
+  icon: require('../icon').default,
 };
 
 const BUTTON_SIZES = 'small medium large xlarge'.split(' ');
+const BUTTON_THEMES = [
+  'pink dark light white',
+  'blue green red',
+  'transparent-light transparent-dark transparent-blue',
+].join(' ').split(' ');
 
 export default {
   components,
@@ -37,8 +37,11 @@ export default {
       type: String,
       validator: val => BUTTON_SIZES.includes(val),
     },
-    color: { type: String, default: '#212046' },
-    transparent: Boolean,
+    theme: {
+      type: String,
+      validator: val => BUTTON_THEMES.includes(val),
+      default: 'pink',
+    },
     href: String, // passes through to <a>
     to: [String, Object], // passes through to <router-link>
     toNamedRoute: String,
@@ -64,7 +67,6 @@ export default {
     },
     classes() {
       return {
-        'is-hover': this.isHoverActive,
         'is-disabled': this.disabled,
         'is-loading': this.loading,
         ...this.size && { [`button--${this.size}`]: true },
@@ -75,48 +77,14 @@ export default {
     routerLinkTo() {
       return this.toNamedRoute ? { name: this.toNamedRoute } : this.to;
     },
-    computedStyles() {
-      // css that gets injected into the head
-      const legibleText = tinycolor.mostReadable(this.color, ['#211e2c', '#FFF']).toHexString();
-      const tc = tinycolor(this.color);
-
-      if (this.transparent) {
-        return {
-          borderColor: this.color,
-          color: this.color,
-          backgroundColor: 'transparent',
-          ...this.isHoverActive && {
-            backgroundColor: tc.clone().lighten(10).toHexString(),
-            color: legibleText,
-          },
-        };
-      }
-
-      return {
-        backgroundColor: this.color,
-        color: legibleText,
-        ...this.isHoverActive && {
-          backgroundColor: tc.clone().lighten(10).toHexString(),
-        },
-      };
-    },
   },
   data() {
-    return {
-      isHoverActive: false,
-    };
+    return {};
   },
 };
 </script>
 
 <style lang='less'>
-
-@navy: #212046;
-@dark-gray: #333;
-@cta-blue: rgb(57, 85, 243);
-@green: rgb(24, 114, 28);
-@error-red-bg: #580808;
-
 
 button.button {
 
@@ -125,7 +93,7 @@ button.button {
 .button {
   display: inline-block;
   cursor: pointer;
-  border-radius: 0px;
+  border-radius: 3px;
   border-width: 1px;
   border-style: solid;
   border-color: rgba(0,0,0,0);
@@ -136,23 +104,24 @@ button.button {
 
   transition: .25s all;
 
-  // text-transform: lowercase;
+  text-transform: uppercase;
+  font-family: inherit;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 12px;
 
   user-select: none;
   margin-right: 3px;
   margin-bottom: 1px;
+  white-space: nowrap;
 
 
-  svg {
+  .icon {
     vertical-align: middle;
     margin-right: 10px;
     margin-left: -8px;
     margin-top: -2px;
     width: 20px;
     height: 20px;
-    fill: currentColor;
   }
 
   &:focus {
@@ -163,7 +132,7 @@ button.button {
   }
 
   // Size options
-  padding: 10px 30px;
+  padding: 8px 20px;
   &.button--small {
     padding: 4px 10px;
 
@@ -176,7 +145,7 @@ button.button {
 
   }
   &.button--large {
-    padding: 20px 60px;
+    padding: 15px 40px;
     // font-size: 16px;
   }
   &.button--xlarge {
@@ -227,6 +196,30 @@ button.button {
       background: fade(@color, 60);
       color: contrast(@color);
       border-color: @color;
+
+    }
+  }
+
+  &.pink { .create-theme(@brand-pink); }
+
+  &.blue { .create-theme(@cta-blue); }
+  &.green { .create-theme(@green); }
+  // &.green { .create-theme(#1aca8d); }
+  &.red { .create-theme(@error-red-bg); }
+  &.dark { .create-theme(@navy); }
+  &.light { .create-theme(@gray-blue); }
+  &.white { .create-theme(#FFFFFF); }
+  &.header {
+    background-color: #019BC9;
+    color: white !important;
+    &:hover {
+      background-color: #06ABDC;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+      text-shadow: none;
+      }
+    &:active {
+      background-color: #008AB3;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
     }
   }
 

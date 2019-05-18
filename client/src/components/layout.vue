@@ -44,7 +44,7 @@ export default {
 .main-logo {
   height: 100%;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-content: center;
   text-decoration: none;
   color: currentColor;
