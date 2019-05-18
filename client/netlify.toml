@@ -1,0 +1,13 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# SEE https://www.netlify.com/docs/redirects/
+# rewrite from /pagename to /pagename.html is done automatically
+# fallback to 404.html is done automatically
+
+# the admin interface is a different webpack entry point
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 302
