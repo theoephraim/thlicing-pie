@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "chart.js": "^2.8.0",
     "lodash": "^4.17.11",
     "md": "^0.6.0",
     "normalize.css": "^8.0.1",
     "vue": "^2.6.6",
+    "vue-chartjs": "^3.4.2",
     "vue-meta": "^1.5.8",
     "vue-router": "^3.0.1",
     "vuelidate": "^0.7.4"
