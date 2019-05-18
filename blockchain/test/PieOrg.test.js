@@ -6,6 +6,7 @@ let _ = '        '
 
 contract('PieOrg', async function(accounts) {
   let pieOrg
+  let creatorAddress = accounts[0];
 
   before(done => {
     ;(async () => {
@@ -41,6 +42,45 @@ contract('PieOrg', async function(accounts) {
       assert(
         name === "TestOrg",
         `Name was ${name}, not TestOrg`
+      )
+    })
+
+    it('should mint 1 to creator', async function() {
+      var creatorBalance = await pieOrg.balanceOf(creatorAddress);
+      assert(
+        creatorBalance.toNumber() === 1,
+        `Balance was ${creatorBalance}, not 1`
+      )
+    })
+
+    it('should track creator', async function() {
+      var trackedLength = await pieOrg.getTrackedAccountsLength();
+      var trackedCreator = await pieOrg.trackedAccounts(0);
+      assert(
+        trackedCreator.accountAddress === creatorAddress,
+        `fail: ${trackedCreator}`
+      )
+      assert(
+        trackedLength.toNumber() === 1,
+        `fail: ${trackedLength.toNumber()}`
+      )
+    })
+
+    it('can get all tracked accounts', async function() {
+      var trackedAccounts = await pieOrg.getTrackedAccounts();
+      var trackedAccountAddresses = trackedAccounts[0];
+      var trackedAccountBalances = trackedAccounts[1];
+      assert(
+        trackedAccountAddresses.length === 1,
+        `fail`
+      )
+      assert(
+        trackedAccountAddresses[0] === creatorAddress,
+        `fail`
+      )
+      assert(
+        trackedAccountBalances[0].toNumber() === 1,
+        `balance is ${trackedAccountBalances[0].toNumber()}`
       )
     })
 
