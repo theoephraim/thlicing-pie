@@ -3,6 +3,7 @@
   "version": "1.0",
   "description": "Truffle Boilerplate with solium, linguist, zeppelin, migrations, tests &tc",
   "scripts": {
+    "dev": "npx truffle develop",
     "develop": "npx truffle develop",
     "compile": "npx truffle compile",
     "migrate": "npx truffle migrate",
