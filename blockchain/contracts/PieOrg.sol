@@ -7,6 +7,9 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
  * The PieOrg contract does it all
  */
 contract PieOrg is ERC20, ERC20Detailed {
+    uint yesThreshold = 70;
+    uint noThreshold = 100 - yesThreshold;
+
     string public orgName;
 
     mapping (address => bool) private _accountIsTracked;
@@ -17,7 +20,20 @@ contract PieOrg is ERC20, ERC20Detailed {
         uint accountBalance;
     }
 
+    struct Proposal {
+        address toAddress;
+        uint amount;
+        string metadata;
+        uint proposalType;
+        bool complete;
+        bool success;
+        uint lastCalculatedResult;
+        mapping (address => bool) accountHasVoted;
+        mapping (address => bool) accountVote;
+    }
+
     TrackedAccount[] public trackedAccounts;
+    Proposal[] public proposals;
 
     constructor(string memory _orgName) public ERC20Detailed(_orgName, "SLICE", 18) {
         require(bytes(_orgName).length > 0, "Org name must be nonempty");
@@ -30,25 +46,89 @@ contract PieOrg is ERC20, ERC20Detailed {
         _;
     }
 
-    function makeMintProposal(string memory metadata, address mintToAddress, uint256 mintAmount) public onlyMember {
-
-    }
-
-    //TODO: add re-entrancy protection to this later?
-    function makeSpendProposal(string memory metadata, address spendToAddress, uint256 spendAmount) public onlyMember  {
-
-    }
-
-    function makeDividendProposal(string memory metadata, uint256 dividendAmount) public onlyMember {
-
+    function makeProposal(address toAddress, uint256 amount, string memory metadata, uint proposalType) public onlyMember {
+        proposals.push(Proposal(toAddress, amount, metadata, proposalType, false, false, 0));
     }
 
     function voteProposal(uint256 proposalID, bool vote) public onlyMember {
+        Proposal storage proposal = proposals[proposalID];
+        require(proposal.accountHasVoted[msg.sender] == false, "Error already voted");
+        proposal.accountHasVoted[msg.sender] = true;
+        proposal.accountVote[msg.sender] = vote;
+        countProposal(proposalID);
+    }
 
+    function countProposal(uint256 proposalID) public onlyMember {
+        Proposal storage proposal = proposals[proposalID];
+        require(proposal.complete == false, "Proposal already complete");
+        uint yesVotes = 0;
+        uint noVotes = 0;
+        for (uint i = 0; i < trackedAccounts.length; i++) {
+            TrackedAccount storage trackedAccount = trackedAccounts[i];
+            address accountAddress = trackedAccount.accountAddress;
+            if (proposal.accountHasVoted[accountAddress]) {
+                bool vote = proposal.accountVote[accountAddress];
+                uint voteShares = trackedAccount.accountBalance;
+                if(vote) {
+                    yesVotes = SafeMath.add(yesVotes, voteShares);
+                }
+                else {
+                    noVotes = SafeMath.add(noVotes, voteShares);
+                }
+            }
+        }
+        uint totalVotes = totalSupply();
+        uint yesPercent = SafeMath.div(yesVotes, totalVotes);
+        uint noPercent = SafeMath.div(noVotes, totalVotes);
+        if (yesPercent >= yesThreshold) {
+            _succeedProposal(proposalID);
+        }
+        if (noPercent >= noThreshold) {
+            _failProposal(proposalID);
+        }
+    }
+
+    function _succeedProposal(uint256 proposalID) private {
+        Proposal storage proposal = proposals[proposalID];
+        proposal.complete = true;
+        proposal.success = true;
+        if(proposal.proposalType == 0) {
+            _processProposalMint(proposalID);
+        }
+        if(proposal.proposalType == 1) {
+            _processProposalDividend(proposalID);
+        }
+        if(proposal.proposalType == 2) {
+            _processProposalSpend(proposalID);
+        }
+    }
+
+    function _processProposalMint(uint256 proposalID) private {
+        Proposal storage proposal = proposals[proposalID];
+        _mint(proposal.toAddress, proposal.amount);
+    }
+
+    function _processProposalDividend(uint256 proposalID) private {
+        Proposal storage proposal = proposals[proposalID];
+        require(false, "Not yet implemented dividends");
+        //TODO...
+    }
+
+    //re-entrancy protection needed here?
+    function _processProposalSpend(uint256 proposalID) private {
+        Proposal storage proposal = proposals[proposalID];
+        address payable payableAddress = address(uint160(proposal.toAddress));
+        payableAddress.transfer(proposal.amount);
+    }
+
+    function _failProposal(uint256 proposalID) private {
+        Proposal storage proposal = proposals[proposalID];
+        proposal.complete = true;
+        proposal.success = false;
     }
 
     function burnTokens(uint256 tokenAmount) public onlyMember {
-
+        require(false, "Not yet implemented");
     }
 
     function getTrackedAccountsLength() public view returns (uint) {
