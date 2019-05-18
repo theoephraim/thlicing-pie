@@ -13,6 +13,7 @@ export default new Router({
     // pages
     { path: '/', name: 'home', component: require('./pages/home').default },
     { path: '/about', name: 'about', component: require('./pages/about').default },
+    { path: '/create', name: 'create', component: require('./pages/create-company').default },
     {
       path: '/company/:companyAddress',
       name: 'company',

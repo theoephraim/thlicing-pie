@@ -34,11 +34,6 @@ html, body {
 }
 
 body {
-  // background: lighten(@brand-color, 30%);
-  padding: @body-padding;
-  @media @mq-small-only {
-    padding: @body-padding-mobile;
-  }
   transition: background-color .5s;
 }
 

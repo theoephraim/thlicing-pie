@@ -7,9 +7,13 @@ import router from './router';
 // import './lib/load-content-from-cms';
 
 // register some global components
-import MarkdownComponent from './components/markdown.vue';
-
-Vue.component('markdown', MarkdownComponent);
+Vue.component('layout', require('./components/layout').default);
+Vue.component('markdown', require('./components/markdown').default);
+Vue.component('v-button', require('./components/forms/v-button').default);
+Vue.component('form-group', require('./components/forms/form-group').default);
+Vue.component('form-input', require('./components/forms/form-input').default);
+Vue.component('form-input-option', require('./components/forms/form-input-option').default);
+Vue.component('form-row', require('./components/forms/form-row').default);
 
 Vue.config.devtools = true;
 Vue.config.productionTip = false;

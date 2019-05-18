@@ -1,7 +1,9 @@
 <template lang='pug'>
 .layout.theme-page-bg
   .header-bar
-    div this is the header
+    router-link.main-logo(to='/')
+      logo
+      h1 THLICING PIE
 
   slot
   footer.footer
@@ -10,6 +12,7 @@
 
 <script>
 const components = {
+  logo: require('@/assets/images/logo.svg?inline').default,
   'facebook-logo': require('@/assets/images/facebook.svg?inline').default,
   'instagram-logo': require('@/assets/images/instagram.svg?inline').default,
 };
@@ -31,6 +34,34 @@ export default {
 </script>
 
 <style lang="less">
+.header-bar {
+  background: #000;
+  color: #FFF;
+  width: 100%;
+  height: 100px;
+  padding: 20px;
+}
+.main-logo {
+  height: 100%;
+  display: flex;
+  justify-content: start;
+  align-content: center;
+  text-decoration: none;
+  color: currentColor;
+  &:hover {
+    color: @brand-color;
+  }
+
+  h1 {
+    display: inline-block;
+  }
+  svg {
+    display: inline-block;
+    height: 100%;
+    width: auto;
+    fill: currentColor;
+  }
+}
 
 
 </style>
