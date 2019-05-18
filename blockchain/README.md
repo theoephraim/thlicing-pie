@@ -6,9 +6,12 @@
 ## Install
 ```
 yarn
-// then create a .env file that looks like this:
 
-TRUFFLE_MNEMONIC=candy maple cake sugar pudding cream honey rich smooth crumble sweet treat
+// run truffle develop to see your mnemonic
+yarn dev
+
+// then create a .env file that looks like this:
+TRUFFLE_MNEMONIC=yourTruffleMnemonic
 GANACHE_MNEMONIC=grid voyage cream cry fence load stove sort grief fuel room save
 TESTNET_MNEMONIC=a twelve word mnemonic phrase that works with some test network buddy
 INFURA_API_KEY=yOUrInfURaKEy
