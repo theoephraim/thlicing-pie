@@ -1,0 +1,13 @@
+{
+  "ignore": [
+    ".env"
+  ],
+  "commands": {
+    "Compile contracts": "truffle compile",
+    "Migrate contracts": "truffle migrate",
+    "Test contracts": "npm run test"
+  },
+  "hooks": {
+    "post-unpack": "npm i"
+  }
+}
