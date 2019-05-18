@@ -48,7 +48,9 @@ export default {
       if (this.$hasError()) return;
       // TODO: deploy new contract, show address to user
       const companyAddress = await this.$store.dispatch('deployNewCompany', this.company);
-      this.$router.push({ name: 'company', params: { companyAddress } });
+      if (companyAddress) {
+        this.$router.push({ name: 'company', params: { companyAddress } });
+      }
     },
   },
 };

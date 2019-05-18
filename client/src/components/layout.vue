@@ -3,7 +3,7 @@
   .header-bar
     router-link.main-logo(to='/')
       logo
-      h1 THLICING PIE
+      h1 SliceDAO
 
   slot
   footer.footer

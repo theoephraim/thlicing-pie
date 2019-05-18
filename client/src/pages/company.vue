@@ -26,7 +26,7 @@ layout#page-company()
                 icon(name='check')
               .vote-no.vote-button
                 icon(name='times')
-          v-button(@click='showProposalPopup' icon='plus') Create new proposal
+          v-button.create-proposal-button(@click='showProposalPopup' icon='plus') Create new proposal
         .completed-proposals
           h3 Completed Proposals
           .proposal(v-for='proposal in completedProposals')
@@ -75,7 +75,7 @@ layout#page-company()
       )
 
     form-row
-      v-button() Create This Proposal
+      v-button(@click='confirmProposalButtonHandler') Create This Proposal
 
 
 </template>
@@ -83,16 +83,18 @@ layout#page-company()
 <script>
 import _ from 'lodash';
 import { mapGetters, mapState } from 'vuex';
-import pie from '../components/pie.vue';
+
+const { vuelidateGroupMixin } = require('@/lib/vuelidate-group');
 
 const components = {
   layout: require('@/components/layout').default,
-  pie,
+  pie: require('@/components/pie').default,
 };
 
 
 export default {
   components,
+  mixins: [vuelidateGroupMixin],
   metaInfo() {
     return {
       title: 'Manage company',
@@ -145,6 +147,9 @@ export default {
     showProposalPopup() {
       this.$refs.proposalPopup.open();
     },
+    confirmProposalButtonHandler() {
+      if (this.$hasError()) return;
+    },
   },
 };
 </script>
@@ -185,6 +190,11 @@ export default {
 }
 
 .current-proposals {
+  .create-proposal-button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
   .proposal {
     display: flex;
     margin-bottom: 5px;

@@ -24,6 +24,7 @@ module.exports = {
     'radix': 'off',
     'no-param-reassign': 'off',
     'consistent-return': 'off',
+    'no-useless-return': 'off',
   },
   parserOptions: {
     parser: 'babel-eslint',
