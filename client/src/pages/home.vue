@@ -8,7 +8,7 @@ layout#page-home
     create-company
 
   .donate
-    v-button.chic-black(@click='') Donate to this project!
+    v-button.chic-black(@click='openWyre') Donate to this project!
 </template>
 
 <script>
@@ -22,7 +22,14 @@ const components = {
 
 export default {
   components,
-  metaInfo: {
+  metaInfo() {
+    return {
+      script: [
+        {
+          src: 'https://verify.sendwyre.com/js/widget-loader.js',
+        },
+      ],
+    };
   },
   data() {
     return {
@@ -31,7 +38,22 @@ export default {
   computed: {
   },
   methods: {
+    openWyre() {
+      this.wyreWidget = new window.Wyre.Widget({
+        env: 'test',
+        accountId: 'AK-T7RJM3TT-LW7FTE76-BX7AWCBL-UU8H6XXJ',
+        auth: { type: 'metamask' },
+        operation: {
+          type: 'debitcard',
+          dest: 'ethereum:0x4b8f33d96fE99e80bE83bA9Ab2089A900e9f01CD',
+          sourceCurrency: 'USD',
+          destCurrency: 'ETH',
+          destAmount: 0.05,
+        },
+      });
 
+      this.wyreWidget.open();
+    },
   },
   mounted() {
   },
