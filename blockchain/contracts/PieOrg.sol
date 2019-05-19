@@ -111,13 +111,22 @@ contract PieOrg is ERC20, ERC20Detailed {
         _mint(proposal.toAddress, proposal.amount);
     }
 
+    //TODO: fix for re-rentrancy, maybe for async withdrawal, and check for nonpayable addresses
     function _processProposalDividend(uint256 proposalID) private {
         Proposal storage proposal = proposals[proposalID];
-        require(false, "Not yet implemented dividends");
-        //TODO...
+        for (uint i = 0; i < trackedAccounts.length; i++) {
+            TrackedAccount storage trackedAccount = trackedAccounts[i];
+            address accountAddress = trackedAccount.accountAddress;
+            uint voteShares = trackedAccount.accountBalance;
+            uint totalVotes = totalSupply();
+            uint proportion = SafeMath.div(totalVotes, voteShares);
+            uint ethShare = SafeMath.div(address(this).balance, proportion);
+            address payable payableAddress = address(uint160(accountAddress));
+            payableAddress.transfer(ethShare);
+        }
     }
 
-    //re-entrancy protection needed here?
+    //fix for re-rentrancy, maybe for async withdrawal, and check for nonpayable addresses
     function _processProposalSpend(uint256 proposalID) private {
         Proposal storage proposal = proposals[proposalID];
         address payable payableAddress = address(uint160(proposal.toAddress));
