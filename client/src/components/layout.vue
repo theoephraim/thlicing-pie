@@ -4,6 +4,9 @@
     router-link.main-logo(to='/')
       logo
       h1 Slice of DAO
+
+    a.github-logo(href='https://github.com/theoephraim/thlicing-pie', target="_blank")
+      github-logo
   .main
     slot
   footer.footer
@@ -16,6 +19,7 @@ const components = {
   logo: require('@/assets/images/logo.svg?inline').default,
   'facebook-logo': require('@/assets/images/facebook.svg?inline').default,
   'instagram-logo': require('@/assets/images/instagram.svg?inline').default,
+  'github-logo': require('@/assets/images/github.svg?inline').default,
 };
 
 export default {
@@ -41,6 +45,9 @@ export default {
   width: 100%;
   height: 100px;
   padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .main-logo {
   height: 100%;
@@ -76,7 +83,11 @@ export default {
   width: 100%;
   height: 100px;
   padding: 20px;
+  display: flex;
+  justify-content: space-evenly;
   .dogfood {
+    vertical-align: middle;
+    line-height: 40px;
     font-style: italic;
     font-size: 11px;
     text-align: center;
@@ -86,5 +97,15 @@ export default {
   }
 }
 
+.github-logo {
+  width: 50px;
+  height: 50px;
+  svg {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    filter: invert(100%);
+  }
+}
 
 </style>
