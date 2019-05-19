@@ -143,6 +143,11 @@ export default {
   metaInfo() {
     return {
       title: 'Manage company',
+      script: [
+        {
+          src: 'https://verify.sendwyre.com/js/widget-loader.js',
+        },
+      ],
     };
   },
   props: {
@@ -187,6 +192,8 @@ export default {
 
     },
   },
+  mounted() {
+  },
   data() {
     return {
       proposal: {},
@@ -207,6 +214,22 @@ export default {
     },
     tryVote(proposalId, vote) {
       this.$store.dispatch('voteOnProposal', { proposalId, vote });
+    },
+    openWyre() {
+      this.wyreWidget = new window.Wyre.Widget({
+        env: 'test',
+        accountId: 'AK-T7RJM3TT-LW7FTE76-BX7AWCBL-UU8H6XXJ',
+        auth: { type: 'metamask' },
+        operation: {
+          type: 'debitcard',
+          dest: 'ethereum:0x4b8f33d96fE99e80bE83bA9Ab2089A900e9f01CD',
+          sourceCurrency: 'USD',
+          destCurrency: 'ETH',
+          destAmount: 0.05,
+        },
+      });
+
+      this.wyreWidget.open();
     },
   },
 };
