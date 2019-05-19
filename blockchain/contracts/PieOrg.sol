@@ -40,6 +40,10 @@ contract PieOrg is ERC20, ERC20Detailed {
         _mint(msg.sender, 1);
     }
 
+    function() external payable {
+
+    }
+
     modifier onlyMember() {
         require(balanceOf(msg.sender) > 0, "Msg sender must own a slice");
         _;
