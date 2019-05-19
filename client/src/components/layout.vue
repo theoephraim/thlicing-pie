@@ -4,10 +4,12 @@
     router-link.main-logo(to='/')
       logo
       h1 Slice of DAO
-
-  slot
+  .main
+    slot
   footer.footer
-    div this is the footer
+    div
+      .donate
+        v-button.chic-black(@click='') Donate to this project!
 </template>
 
 <script>
@@ -64,5 +66,16 @@ export default {
   }
 }
 
+.main {
+  min-height: 80vh;
+  background-color: black
+}
+
+.footer {
+  background: #000;
+  width: 100%;
+  height: 100px;
+  padding: 20px;
+}
 
 </style>

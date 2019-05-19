@@ -1,5 +1,14 @@
 <template lang='pug'>
-  button.zerox-instant(@click='renderZeroExInstant') Buy A Slice of Our Pie
+  div
+    v-button.zerox-popup(@click='showInfoPopup') Invest in our Company
+    popup(
+      ref='investorInfoPopup'
+      title='Invest now in our company'
+    )
+      form-row(no-inputs)
+        p You can be a part of our company. Click the button below to buy our tokens and to claim your slice of our pie!
+      div.button-area
+        button.zerox-instant(@click='renderZeroExInstant') Click here to buy now
 </template>
 
 <script>
@@ -13,18 +22,34 @@ export default {
   },
   data() {
     return {
+      coinToBuy: '0xf47261b000000000000000000000000089d24a6b4ccb1b6faa2625fe562bdd9a23260359',
     };
   },
   computed: {
   },
   methods: {
     renderZeroExInstant() {
+      this.closeInfoPopup();
       window.zeroExInstant.render(
         {
           orderSource: 'https://api.radarrelay.com/0x/v2/',
+          // availableAssetDatas: [
+          //   '0xA80008d296De83570670450E72F6a7Ef541b7c7D',
+          // ],
+          availableAssetDatas: [
+            this.coinToBuy,
+          ],
+          defaultSelectedAssetData: this.coinToBuy,
+          networkId: 3,
         },
         'body',
       );
+    },
+    showInfoPopup() {
+      this.$refs.investorInfoPopup.open();
+    },
+    closeInfoPopup() {
+      this.$refs.investorInfoPopup.close();
     },
   },
   mounted() {
@@ -37,6 +62,27 @@ export default {
 <style lang='less'>
 @import '~normalize.css';
 
+.zerox-popup {
+  font-family: @regular-font;
+  color: black;
+  background-color: white;
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid black;
+  margin: 5px;
+
+  &:hover {
+    color: white;
+    background-color: black;
+  }
+
+  &:active {
+    color: @brand-color;
+  }
+}
+
 .zerox-instant {
   font-family: @regular-font;
   color: white;
@@ -46,7 +92,7 @@ export default {
   font-weight: bold;
   cursor: pointer;
   border: 1px solid black;
-  margin: 5px;
+  margin: 15px;
 
   &:hover {
     color: @brand-color;
@@ -56,5 +102,11 @@ export default {
     color: black;
     background-color: white;
   }
+}
+
+.button-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

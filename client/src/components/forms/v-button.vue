@@ -40,7 +40,7 @@ export default {
     theme: {
       type: String,
       validator: val => BUTTON_THEMES.includes(val),
-      default: 'pink',
+      default: 'white',
     },
     href: String, // passes through to <a>
     to: [String, Object], // passes through to <router-link>
@@ -198,6 +198,38 @@ button.button {
       color: contrast(@color);
       border-color: @color;
 
+    }
+  }
+
+  &.chic-black {
+    width: 50%;
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+    font-size: 15px;
+    border-radius: 3px;
+    background-color: white !important;
+
+    &:hover {
+      background-color: black !important;
+      color: white;
+    }
+  }
+
+    &.chic-green {
+    width: 50%;
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+    font-size: 15px;
+    border-radius: 3px;
+    background-color: @brand-color !important;
+
+    &:hover {
+      background-color: black !important;
+      color: @brand-color;
     }
   }
 
