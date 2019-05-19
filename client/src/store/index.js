@@ -44,6 +44,7 @@ export default new Vuex.Store({
     },
     sliceHolders: [],
     proposals: [],
+    userBalance: null,
 
   },
   getters: {
@@ -60,6 +61,7 @@ export default new Vuex.Store({
       if (!shares) return false;
       return shares.numSlices > 0;
     },
+    userBalance: state => state.userBalance,
   },
   actions: {
     connectToCompany: async (ctx, contractAddress) => {
@@ -103,6 +105,9 @@ export default new Vuex.Store({
       ctx.commit('SET_POT_TOKEN_BALANCE', {
         token: 'ETH', balance: ethBalance,
       });
+
+      const userBalance = await web3.getBalance(ctx.state.ethers.address);
+      ctx.commit('SET_USER_BALANCE', ethers.utils.formatUnits(userBalance, 'ether'));
 
       // enable when not running locally
 
@@ -219,6 +224,9 @@ export default new Vuex.Store({
     },
     SET_PROPOSALS: (state, proposals) => {
       state.proposals = proposals;
+    },
+    SET_USER_BALANCE: (state, balance) => {
+      state.userBalance = balance;
     },
   },
 });
