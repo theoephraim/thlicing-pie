@@ -54,6 +54,7 @@ export default {
 
   h1 {
     display: inline-block;
+    padding-left: 10px;
   }
   svg {
     display: inline-block;

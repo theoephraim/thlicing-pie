@@ -20,6 +20,7 @@ export default new Router({
       component: require('./pages/company').default,
       props: true,
     },
+    { path: '/temp', name: 'temp', component: require('./pages/temp').default },
     { path: '*', name: 'not-found', component: require('./pages/404').default },
   ],
 });
