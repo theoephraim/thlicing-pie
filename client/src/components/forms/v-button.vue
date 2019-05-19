@@ -207,12 +207,13 @@ button.button {
     font-size: 15px;
     border-radius: 3px;
     border-color: white;
+    color: black !important;
     background-color: white !important;
 
     &:hover {
       background-color: @brand-pink !important;
       border-color: @brand-pink;
-      color: white;
+      color: white !important;
     }
   }
 
