@@ -14,6 +14,10 @@ layout#page-company()
         ul.slice-holders
           li(v-for='holder in orgSliceHolders')
             | {{ holder.address.substr(0,6) }}..{{ holder.address.substr(-4) }} - {{ holder.numSlices }}
+
+        .balance
+          h3 Pot Balance
+          .eth-balance {{ balances.ETH }} ETH
       .col2
 
       .col3
@@ -141,6 +145,7 @@ export default {
       'orgSliceHolders',
       'currentProposals',
       'completedProposals',
+      'balances',
     ]),
     pieChartData() {
       if (!this.contractConnected || !this.orgSliceHolders) return {};
