@@ -7,6 +7,8 @@ layout#page-home
   .create
     create-company
 
+  .donate
+    v-button.chic-black(@click='') Donate to this project!
 </template>
 
 <script>
