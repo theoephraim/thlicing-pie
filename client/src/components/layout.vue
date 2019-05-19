@@ -8,8 +8,6 @@
     slot
   footer.footer
     div
-      .donate
-        v-button.chic-black(@click='') Donate to this project!
       .dogfood We manage these funds using Slice of DAO!
 </template>
 

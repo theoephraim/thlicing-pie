@@ -24,15 +24,16 @@ export default {
     ],
   },
   data() {
-    return {
-      coinToBuy: '0xf47261b000000000000000000000000089d24a6b4ccb1b6faa2625fe562bdd9a23260359',
-    };
+    return {};
   },
   computed: {
     ...mapState('ethers', ['user']),
     ...mapState(['sliceHolders']),
     isShareholder() {
       return _.find(this.sliceHolders, { address: this.user });
+    },
+    coinToBuyAddress() {
+      return this.$route.params.companyAddress;
     },
   },
   methods: {
@@ -45,9 +46,9 @@ export default {
           //   '0xA80008d296De83570670450E72F6a7Ef541b7c7D',
           // ],
           availableAssetDatas: [
-            this.coinToBuy,
+            this.coinToBuyAddress,
           ],
-          defaultSelectedAssetData: this.coinToBuy,
+          defaultSelectedAssetData: this.coinToBuyAddress,
           networkId: 3,
         },
         'body',
