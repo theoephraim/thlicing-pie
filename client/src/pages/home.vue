@@ -54,13 +54,14 @@ export default {
 }
 
 .donate {
+  margin-top: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .create-company {
-  padding: 2rem 3rem;
+  padding: 0.5rem 3rem;
 }
 
 

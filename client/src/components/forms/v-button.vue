@@ -206,10 +206,12 @@ button.button {
     border: 2px solid;
     font-size: 15px;
     border-radius: 3px;
+    border-color: white;
     background-color: white !important;
 
     &:hover {
-      background-color: black !important;
+      background-color: @brand-pink !important;
+      border-color: @brand-pink;
       color: white;
     }
   }
@@ -219,10 +221,11 @@ button.button {
     border: 2px solid;
     font-size: 15px;
     border-radius: 3px;
+    border-color: @brand-color;
     background-color: @brand-color !important;
 
     &:hover {
-      background-color: black !important;
+      background-color: transparent !important;
       color: @brand-color;
     }
   }
