@@ -34,7 +34,7 @@ contract PieOrg is ERC20, ERC20Detailed {
     TrackedAccount[] public trackedAccounts;
     Proposal[] public proposals;
 
-    constructor(string memory _orgName) public ERC20Detailed(_orgName, "SLICE", 18) {
+    constructor(string memory _orgName) public ERC20Detailed(_orgName, "SLICE", 0) {
         require(bytes(_orgName).length > 0, "Org name must be nonempty");
         orgName = _orgName;
         _mint(msg.sender, 1);
