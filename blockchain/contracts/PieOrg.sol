@@ -27,7 +27,6 @@ contract PieOrg is ERC20, ERC20Detailed {
         uint proposalType;
         bool complete;
         bool success;
-        uint lastCalculatedResult;
         mapping (address => bool) accountHasVoted;
         mapping (address => bool) accountVote;
     }
@@ -46,8 +45,8 @@ contract PieOrg is ERC20, ERC20Detailed {
         _;
     }
 
-    function makeProposal(address toAddress, uint256 amount, string memory metadata, uint proposalType) public onlyMember {
-        proposals.push(Proposal(toAddress, amount, metadata, proposalType, false, false, 0));
+    function makeProposal(address toAddress, uint256 amount, string memory metadata, uint proposalType) public onlyMember returns (uint) {
+        return proposals.push(Proposal(toAddress, amount, metadata, proposalType, false, false));
     }
 
     function voteProposal(uint256 proposalID, bool vote) public onlyMember {
@@ -135,6 +134,10 @@ contract PieOrg is ERC20, ERC20Detailed {
         return trackedAccounts.length;
     }
 
+    function getProposalsLength() public view returns (uint) {
+        return proposals.length;
+    }
+
     function getTrackedAccounts() public view returns(address[] memory, uint[] memory) {
         uint allAccountsLength = getTrackedAccountsLength();
         address[] memory allAccountAddresses = new address[](allAccountsLength);
@@ -144,6 +147,44 @@ contract PieOrg is ERC20, ERC20Detailed {
             allAccountBalances[i] = trackedAccounts[i].accountBalance;
         }
         return (allAccountAddresses, allAccountBalances);
+    }
+
+    function getProposals() public view returns(
+        address[] memory,
+        uint[] memory,
+        // string[] memory,
+        uint[] memory,
+        bool[] memory,
+        bool[] memory,
+        uint[] memory) {
+        uint allProposalsLength = getProposalsLength();
+        address[] memory allProposalToAddresses = new address[](allProposalsLength);
+        uint[] memory allProposalAmounts = new uint[](allProposalsLength);
+        string[] memory allProposalMetadatas = new string[](allProposalsLength);
+        uint[] memory allProposalTypes = new uint[](allProposalsLength);
+        bool[] memory allProposalCompletes = new bool[](allProposalsLength);
+        bool[] memory allProposalSuccesses = new bool[](allProposalsLength);
+        uint[] memory allProposalMyVote = new uint[](allProposalsLength);
+        for (uint i = 0; i < allProposalsLength; i++) {
+            allProposalToAddresses[i] = proposals[i].toAddress;
+            allProposalAmounts[i] = proposals[i].amount;
+            allProposalMetadatas[i] = proposals[i].metadata;
+            allProposalTypes[i] = proposals[i].proposalType;
+            allProposalCompletes[i] = proposals[i].complete;
+            allProposalSuccesses[i] = proposals[i].success;
+            uint myVote = 0;
+            if(proposals[i].accountHasVoted[msg.sender]) {
+                if(proposals[i].accountVote[msg.sender]) {
+                    myVote = 2;
+                }
+                else {
+                    myVote = 1;
+                }
+            }
+            allProposalMyVote[i] = myVote;
+        }
+        return (allProposalToAddresses, allProposalAmounts,
+            allProposalTypes, allProposalCompletes, allProposalSuccesses, allProposalMyVote);
     }
 
     function _mint(address account, uint256 value) internal {
