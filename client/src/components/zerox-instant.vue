@@ -49,7 +49,7 @@ export default {
             this.coinToBuyAddress,
           ],
           defaultSelectedAssetData: this.coinToBuyAddress,
-          networkId: 3,
+          networkId: 42,
         },
         'body',
       );
