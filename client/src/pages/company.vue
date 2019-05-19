@@ -7,6 +7,7 @@ layout#page-company()
   div(v-else)
     .col-container
       .col1
+        .org-name {{ orgName }}
         .total-slices Total Slices: {{ orgTotalSlices }}
 
         pie.pie(:data="pieChartData")
@@ -18,20 +19,46 @@ layout#page-company()
       .col3
         .current-proposals
           h3 Active Proposals
-          .proposal(v-for='proposal in currentProposals')
+          .proposal(v-for='proposal in currentProposals' :key='`p-${proposal.id}`')
             .description
-              b {{ proposal.type }}
+              template(v-if='proposal.type === 0')
+                .action-name Issue Slices
+                div
+                  span.amount {{ proposal.amount }} slices
+                  span= ' to '
+                  span.address {{ proposal.address.substr(-4) }}
+              template(v-if='proposal.type === 1')
+                .action-name Disperse Dividends
+              template(v-if='proposal.type === 2')
+                .action-name Spend ETH
+                div
+                  span.amount {{ proposal.amount }} ETH
+                  span= ' to '
+                  span.address {{ proposal.address.substr(-4) }}
             .buttons(:class='`voted-${proposal.myVote}`')
-              .vote-yes.vote-button
+              .vote-yes.vote-button(@click='tryVote(proposal.id, true)')
                 icon(name='check')
-              .vote-no.vote-button
+              .vote-no.vote-button(@click='tryVote(proposal.id, false)')
                 icon(name='times')
           v-button.create-proposal-button(@click='showProposalPopup' icon='plus') Create new proposal
         .completed-proposals
           h3 Completed Proposals
           .proposal(v-for='proposal in completedProposals')
             icon(:name='proposal.result ? "check" : "times"')
-            b {{ proposal.type }}
+            template(v-if='proposal.type === 0')
+              .action-name Issue Slices
+              div
+                span.amount {{ proposal.amount }} slices
+                span= ' to '
+                span.address {{ proposal.address.substr(-4) }}
+            template(v-if='proposal.type === 1')
+              .action-name Disperse Dividends
+            template(v-if='proposal.type === 2')
+              .action-name Spend ETH
+              div
+                span.amount {{ proposal.amount }} ETH
+                span= ' to '
+                span.address {{ proposal.address.substr(-4) }}
 
   popup(
     ref='proposalPopup'
@@ -133,6 +160,13 @@ export default {
         this.$store.dispatch('connectToCompany', this.companyAddress);
       }
     },
+    pieChartData: {
+      deep: true,
+      handler() {
+        console.log('pie change!');
+      },
+
+    },
   },
   data() {
     return {
@@ -145,10 +179,15 @@ export default {
       return `rgb(${colorNumber},${colorNumber},${colorNumber})`;
     },
     showProposalPopup() {
+      this.proposal = {};
       this.$refs.proposalPopup.open();
     },
     confirmProposalButtonHandler() {
       if (this.$hasError()) return;
+      this.$store.dispatch('createProposal', this.proposal);
+    },
+    tryVote(proposalId, vote) {
+      this.$store.dispatch('voteOnProposal', { proposalId, vote });
     },
   },
 };

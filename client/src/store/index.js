@@ -24,6 +24,13 @@ const DAI_ABI = [{
 }];
 
 
+const ACTION_TYPES = {
+  ISSUE_SLICES: 0,
+  DIVIDENDS: 1,
+  SPEND: 2,
+};
+
+
 export default new Vuex.Store({
   modules: {
     ethers: require('./ethers').default,
@@ -35,39 +42,16 @@ export default new Vuex.Store({
       ETH: null,
       DAI: null,
     },
+    sliceHolders: [],
+    proposals: [],
   },
   getters: {
     contractConnected: state => !!state.orgAddress,
-    orgSliceHolders: state => [
-      { address: '0xb45c0548E36757272742fE1E9Cf050ce0b596D6A', numSlices: 5 },
-      { address: '0xb45c0548E36757272742fE1E9Cf050ce0b596D6B', numSlices: 10 },
-      { address: '0xb45c0548E36757272742fE1E9Cf050ce0b596D6C', numSlices: 25 },
-    ],
+    orgSliceHolders: state => state.sliceHolders,
     orgTotalSlices: (state, getters) => _.sumBy(getters.orgSliceHolders, 'numSlices'),
     currentProposals: (state, getters) => _.filter(getters.allProposals, p => p.result === undefined),
     completedProposals: (state, getters) => _.filter(getters.allProposals, p => p.result !== undefined),
-    allProposals: state => [
-      { type: 'ISSUE_DIVIDENDS' },
-      {
-        type: 'SPEND', amount: '1', to: 'someaddress', myVote: true,
-      },
-      { type: 'GRANT_SLICES', amount: '100', to: '0xSomeaddress' },
-      {
-        type: 'GRANT_SLICES', amount: '300', to: 'OxOtheraddress', myVote: false,
-      },
-      {
-        type: 'GRANT_SLICES',
-        amount: '300',
-        to: 'OxOtheraddress',
-        myVote: false,
-        result: false,
-      },
-      {
-        type: 'ISSUE_DIVIDENDS',
-        myVote: true,
-        result: true,
-      },
-    ],
+    allProposals: state => state.proposals,
   },
   actions: {
     connectToCompany: async (ctx, contractAddress) => {
@@ -82,6 +66,8 @@ export default new Vuex.Store({
       ctx.commit('SET_ORG_NAME', await contract.orgName());
 
       ctx.dispatch('refreshPotBalance');
+      ctx.dispatch('refreshSliceHolders');
+      ctx.dispatch('refreshProposals');
     },
 
     deployNewCompany: async (ctx, companyProps) => {
@@ -113,6 +99,88 @@ export default new Vuex.Store({
       // ctx.commit('SET_POT_TOKEN_BALANCE', 'DAI', daiBalance);
     },
 
+    createProposal: async (ctx, proposal) => {
+      let action = ACTION_TYPES[proposal.type];
+      let amount = 0;
+      let address = ctx.state.orgAddress;
+      if (proposal.type === 'DIVIDENDS') {
+        // nothing
+      } else if (proposal.type === 'SPEND') {
+        address = proposal.spendAddress;
+        amount = proposal.spendAmount;
+      } else if (proposal.type === 'ISSUE_SLICES') {
+        action = 0;
+        address = proposal.mintRecipient;
+        amount = proposal.mintAmount;
+      }
+
+      const result = await contract.makeProposal(address, amount, 'DESCRIPTION', action);
+      console.log(result);
+      ctx.dispatch('refreshProposals');
+    },
+    refreshProposals: async (ctx) => {
+      const rawProposals = await contract.getProposals();
+
+      console.log(rawProposals);
+      const proposals = [];
+      for (let i = 0; i < rawProposals[0].length; i++) {
+        proposals.push({
+          id: i,
+          address: rawProposals[0][i],
+          amount: rawProposals[1][i].toNumber(),
+          type: rawProposals[2][i].toNumber(),
+          result: rawProposals[3][i] ? rawProposals[4][i] : undefined,
+          myVote: {
+            0: null,
+            1: false,
+            2: true,
+          }[rawProposals[5][i].toNumber()],
+        });
+      }
+
+
+      // address, amount, type, complete, success,
+      // myvote = 0 no vote, 1 = no, 2 = yes
+
+      // const proposals = [
+      //   { type: 'ISSUE_DIVIDENDS' },
+      //   {
+      //     type: 'SPEND', amount: '1', to: 'someaddress', myVote: true,
+      //   },
+      //   { type: 'GRANT_SLICES', amount: '100', to: '0xSomeaddress' },
+      //   {
+      //     type: 'GRANT_SLICES', amount: '300', to: 'OxOtheraddress', myVote: false,
+      //   },
+      //   {
+      //     type: 'GRANT_SLICES',
+      //     amount: '300',
+      //     to: 'OxOtheraddress',
+      //     myVote: false,
+      //     result: false,
+      //   },
+      //   {
+      //     type: 'ISSUE_DIVIDENDS',
+      //     myVote: true,
+      //     result: true,
+      //   },
+      // ];
+      ctx.commit('SET_PROPOSALS', proposals);
+    },
+    refreshSliceHolders: async (ctx) => {
+      const rawBalances = await contract.getTrackedAccounts();
+      const balances = [];
+      for (let i = 0; i < rawBalances[0].length; i++) {
+        balances.push({
+          address: rawBalances[0][i],
+          numSlices: rawBalances[1][i],
+        });
+      }
+      ctx.commit('SET_SLICE_HOLDERS', balances);
+    },
+    voteOnProposal: async (ctx, { proposalId, vote }) => {
+      const result = await contract.voteProposal(proposalId, vote ? 1 : 0);
+      ctx.dispatch('refreshProposals');
+    },
   },
   mutations: {
     SET_COMPANY_ADDRESS: (state, contractAddress) => {
@@ -123,6 +191,12 @@ export default new Vuex.Store({
     },
     SET_POT_TOKEN_BALANCE: (state, token, balance) => {
       Vue.set(state.potBalance, token, balance);
+    },
+    SET_SLICE_HOLDERS: (state, balances) => {
+      state.sliceHolders = balances;
+    },
+    SET_PROPOSALS: (state, proposals) => {
+      state.proposals = proposals;
     },
   },
 });

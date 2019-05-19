@@ -16,5 +16,13 @@ export default {
     // If you want to pass options please create a local options object
     this.renderChart(this.data, options);
   },
+  watch: {
+    data: {
+      deep: true,
+      handler() {
+        this.renderChart(this.data, options);
+      },
+    },
+  },
 };
 </script>

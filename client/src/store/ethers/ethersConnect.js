@@ -51,6 +51,9 @@ let initialized;
 
 // web3 can be located in one of two places
 export function getWeb3() {
+  // enable metamask
+  if (window.ethereum) window.ethereum.enable();
+
   return window.ethereumProvider || window.web3;
 }
 
