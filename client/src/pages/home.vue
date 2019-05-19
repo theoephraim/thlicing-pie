@@ -65,7 +65,7 @@ export default {
 
 <style lang='less'>
 .home {
-  padding: 2rem 14rem;
+  padding: 2rem 9%;
   color: white;
 }
 
@@ -83,7 +83,7 @@ export default {
 }
 
 .create-company {
-  padding: 0.5rem 3rem;
+  padding: 1% 3%;
 }
 
 

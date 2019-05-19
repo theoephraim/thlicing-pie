@@ -57,7 +57,7 @@ export default {
 
 <style lang='less'>
 .create-company {
-  margin: 0rem 16rem;
+  margin: 0rem 15%;
   color: white;
   background-color:#474747;
   // background-color:white;
