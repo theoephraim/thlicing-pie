@@ -1,0 +1,40 @@
+CLIENT
+- fix total slices
+- highlight your own shares (color)
+- show % ownership for each user
+- smarter reloading of things - after voting? on a timer?
+- integrate 0x widget onto company page
+- clean up proposals interface
+- issue dividends description
+- general UX cleanup
+- make donate button work
+- fund the pot UX
+- create proposal, show dropdown with nicknames
+- proposal ui, show nicknames if available
+- deploy to netlify
+- wyre
+- display balance in USD$
+- fortmatic
+- torus?
+- set my nickname UI
+
+
+BLOCKCHAIN
+- burn using chainlink to convert ETH to $
+- fund the pot
+- method to set your own nickname
+- return nicknames in gettrackedaccounts method
+
+DEMO / DEPLOY
+- deploy to ARweave
+- take screenshots
+- finish writing devpost
+- submit to devpost
+- deploy to ropsten
+- create our org
+- set up shares with 3 people
+- set nicknames
+- send some eth
+- set up 0x Orders and contract address
+- set address on donate button
+
