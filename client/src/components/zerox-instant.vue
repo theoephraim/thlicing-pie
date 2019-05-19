@@ -1,5 +1,5 @@
 <template lang='pug'>
-  div(v-if="!isShareholder")
+  div(v-if="!userIsShareholder")
     v-button.zerox-popup(@click='showInfoPopup') Invest in our Company
     popup(
       ref='investorInfoPopup'
@@ -13,7 +13,7 @@
 
 <script>
 import _ from 'lodash';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   metaInfo: {
@@ -28,13 +28,10 @@ export default {
   },
   computed: {
     ...mapState('ethers', ['user']),
-    ...mapState(['sliceHolders']),
-    isShareholder() {
-      return _.find(this.sliceHolders, { address: this.user });
-    },
     coinToBuyAddress() {
       return this.$route.params.companyAddress;
     },
+    ...mapGetters(['userIsShareholder']),
   },
   methods: {
     renderZeroExInstant() {

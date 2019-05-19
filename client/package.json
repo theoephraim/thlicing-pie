@@ -15,6 +15,7 @@
     "chart.js": "^2.8.0",
     "es6-promisify": "^6.0.0",
     "ethers": "^4.0.27",
+    "fortmatic": "^0.7.2",
     "lodash": "^4.17.11",
     "md": "^0.6.0",
     "normalize.css": "^8.0.1",

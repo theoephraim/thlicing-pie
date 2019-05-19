@@ -1,11 +1,15 @@
 /* eslint-disable */
 import Vue from 'vue';
 import {
+  ethers,
   providers,
   Wallet,
   Contract as ContractModule,
   utils as utilsModule
 } from 'ethers';
+
+import Fortmatic from 'fortmatic';
+
 import {
   promisify
 } from 'es6-promisify';
@@ -49,12 +53,36 @@ let userWallet;
 let providerInterval;
 let initialized;
 
+
+let fortmaticInstance, fortmaticProvider;
+
 // web3 can be located in one of two places
 export function getWeb3() {
-  // enable metamask
-  if (window.ethereum) window.ethereum.enable();
 
-  return window.ethereumProvider || window.web3;
+
+
+  // // enable metamask
+  if (window.ethereum) {
+    window.ethereum.enable();
+    return window.ethereumProvider || window.web3;
+  } else {
+    if (!fortmaticInstance) {
+      console.log('init fm');
+      fortmaticInstance = new Fortmatic(process.env.VUE_APP_FORTMATIC_API_KEY, 'kovan');
+      fortmaticProvider = new ethers.providers.Web3Provider(fortmaticInstance.getProvider());
+      let signer = fortmaticProvider.getSigner();
+      fortmaticInstance.user.login();
+
+      window.fm = fortmaticInstance;
+      window.fp = fortmaticProvider;
+
+      // fortmaticInstance.enable();
+
+      // window.web3 = new Web3(fortmaticProvider.getProvider());
+      // window.web3.currentProvider.enable();
+    }
+    return fortmaticProvider;
+  }
 }
 
 // checks for a connected web3 account

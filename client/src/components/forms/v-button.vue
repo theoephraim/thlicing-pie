@@ -40,7 +40,7 @@ export default {
     theme: {
       type: String,
       validator: val => BUTTON_THEMES.includes(val),
-      default: 'white',
+      default: 'green',
     },
     href: String, // passes through to <a>
     to: [String, Object], // passes through to <router-link>

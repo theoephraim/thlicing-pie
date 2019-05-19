@@ -4,9 +4,15 @@
     router-link.main-logo(to='/')
       logo
       h1 Slice of DAO
+<<<<<<< Updated upstream
 
     a.github-logo(href='https://github.com/theoephraim/thlicing-pie', target="_blank")
       github-logo
+=======
+    .org-info
+      h2.org-name {{ orgName }}
+      .org-address {{ orgAddress }}
+>>>>>>> Stashed changes
   .main
     slot
   footer.footer
@@ -30,6 +36,8 @@ export default {
     };
   },
   props: {
+    orgName: {},
+    orgAddress: {},
   },
   computed: {
   },
@@ -48,6 +56,21 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  .org-info {
+    text-align: right;
+    .org-name {
+      color: @brand-color;
+      display: block;
+      margin: 0;
+      margin-top: 10px;
+      font-size: 32px;
+    }
+    .org-address {
+      font-style: italic;
+      color: #AAA;
+      font-size: 9px;
+    }
+  }
 }
 .main-logo {
   height: 100%;

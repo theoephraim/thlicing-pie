@@ -13,9 +13,6 @@ Vue.use(Vuex);
 
 let contract;
 
-console.log('PARSE', ethers.utils.parseEther('1'));
-
-
 const DAI_CONTRACT_ADDRESS = '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359';
 const DAI_ABI = [{
   constant: true,
@@ -47,6 +44,7 @@ export default new Vuex.Store({
     },
     sliceHolders: [],
     proposals: [],
+
   },
   getters: {
     contractConnected: state => !!state.orgAddress,
@@ -56,6 +54,12 @@ export default new Vuex.Store({
     completedProposals: (state, getters) => _.filter(getters.allProposals, p => p.result !== undefined),
     allProposals: state => state.proposals,
     balances: state => state.potBalance,
+    userIsShareholder: (state) => {
+      if (!state.ethers.connected) return false;
+      const shares = _.find(state.sliceHolders, { address: state.ethers.address });
+      if (!shares) return false;
+      return shares.numSlices > 0;
+    },
   },
   actions: {
     connectToCompany: async (ctx, contractAddress) => {
@@ -190,7 +194,7 @@ export default new Vuex.Store({
       for (let i = 0; i < rawBalances[0].length; i++) {
         balances.push({
           address: rawBalances[0][i],
-          numSlices: rawBalances[1][i],
+          numSlices: parseInt(rawBalances[1][i]),
         });
       }
       ctx.commit('SET_SLICE_HOLDERS', balances);

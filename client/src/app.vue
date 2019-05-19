@@ -14,6 +14,8 @@ export default {
       { rel: 'shortcut icon', type: 'image/png', href: faviconUrl },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Oxygen' },
     ],
+    script: [
+    ],
   },
   mounted() {
     this.$store.dispatch('ethers/init');

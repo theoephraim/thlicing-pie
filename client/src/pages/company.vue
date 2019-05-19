@@ -1,5 +1,8 @@
 <template lang='pug'>
-layout#page-company()
+layout#page-company(
+  :orgName='orgName'
+  :orgAddress='orgAddress'
+)
   div(v-if='!ethersConnected')
     h2 Connecting to web3...
   div(v-else-if='!contractConnected')
@@ -9,6 +12,7 @@ layout#page-company()
       .col1
         zeroxInstant
         .org-name {{ orgName }}
+        .shareholder shareholder? {{ userIsShareholder }}
         .total-slices Total Slices: {{ orgTotalSlices }}
 
         .pie-info
@@ -17,6 +21,7 @@ layout#page-company()
             li(v-for='holder in orgSliceHolders')
               //- | {{ holder.address.substr(0,6) }}..{{ holder.address.substr(-4) }} - {{ holder.numSlices }}
               | {{ holder.address }} - {{ holder.numSlices }}
+              | {{ (holder.numSlices / orgTotalSlices * 100).toFixed() }}%
 
         .balance
           .pot-balance  Pot Balance
@@ -26,6 +31,9 @@ layout#page-company()
       .col3
         .current-proposals
           h3 Active Proposals
+          p(v-if='!currentProposals.length')
+            i no current proposals to vote on
+
           .proposal(v-for='proposal in currentProposals' :key='`p-${proposal.id}`')
             .description
               template(v-if='proposal.type === 0')
@@ -49,7 +57,11 @@ layout#page-company()
                 icon(name='check')
               .vote-no.vote-button(@click='tryVote(proposal.id, false)')
                 icon(name='times')
-          v-button.create-proposal-button(@click='showProposalPopup' icon='plus') Create new proposal
+          v-button.create-proposal-button(
+            v-if='userIsShareholder'
+            @click='showProposalPopup' icon='plus'
+
+          ) Create new proposal
         .completed-proposals
           h3 Completed Proposals
           .proposal(v-for='proposal in completedProposals')
@@ -115,6 +127,7 @@ layout#page-company()
       form-input(
         v-model='proposal.mintAmount'
         label='How many slices?'
+        instructions='slices should compensate for $1'
         required
       )
 
@@ -157,7 +170,7 @@ export default {
     ...mapState({
       ethersConnected: state => state.ethers.connected,
     }),
-    ...mapState(['orgName']),
+    ...mapState(['orgName', 'orgAddress']),
     ...mapGetters([
       'contractConnected',
       'orgTotalSlices',
@@ -165,6 +178,7 @@ export default {
       'currentProposals',
       'completedProposals',
       'balances',
+      'userIsShareholder',
     ]),
     pieChartData() {
       if (!this.contractConnected || !this.orgSliceHolders) return {};
@@ -184,13 +198,6 @@ export default {
         this.$store.dispatch('connectToCompany', this.companyAddress);
       }
     },
-    pieChartData: {
-      deep: true,
-      handler() {
-        console.log('pie change!');
-      },
-
-    },
   },
   mounted() {
   },
@@ -198,6 +205,11 @@ export default {
     return {
       proposal: {},
     };
+  },
+  mounted() {
+    if (this.ethersConnected) {
+      this.$store.dispatch('connectToCompany', this.companyAddress);
+    }
   },
   methods: {
     randomGrey() {
@@ -208,9 +220,10 @@ export default {
       this.proposal = {};
       this.$refs.proposalPopup.open();
     },
-    confirmProposalButtonHandler() {
+    async confirmProposalButtonHandler() {
       if (this.$hasError()) return;
-      this.$store.dispatch('createProposal', this.proposal);
+      await this.$store.dispatch('createProposal', this.proposal);
+      this.$refs.proposalPopup.close();
     },
     tryVote(proposalId, vote) {
       this.$store.dispatch('voteOnProposal', { proposalId, vote });
