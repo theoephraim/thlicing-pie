@@ -203,10 +203,7 @@ button.button {
 
   &.chic-black {
     width: 50%;
-    border-bottom: 2px solid;
-    border-left: 2px solid;
-    border-top: 2px solid black;
-    border-right: 2px solid black;
+    border: 2px solid;
     font-size: 15px;
     border-radius: 3px;
     background-color: white !important;
@@ -219,10 +216,7 @@ button.button {
 
     &.chic-green {
     width: 50%;
-    border-bottom: 2px solid;
-    border-left: 2px solid;
-    border-top: 2px solid black;
-    border-right: 2px solid black;
+    border: 2px solid;
     font-size: 15px;
     border-radius: 3px;
     background-color: @brand-color !important;
