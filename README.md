@@ -18,4 +18,8 @@ Slice of DAO leverages 0x-Instant to enable current shareholders to sell their s
 
 ### Built With
 
-Solidity Truffle Vue 0x ethers.js
+Solidity
+Truffle
+Vue
+ethers.js
+0x
