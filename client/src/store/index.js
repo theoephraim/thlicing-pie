@@ -154,7 +154,7 @@ export default new Vuex.Store({
           },
           description: ethers.utils.parseBytes32String(rawProposals[2][i]),
           type: actionType,
-          result: rawProposals[4][i] ? rawProposals[4][i] : undefined,
+          result: rawProposals[4][i] ? rawProposals[5][i] : undefined,
           myVote: {
             0: null,
             1: false,

@@ -11,20 +11,21 @@ layout#page-company(
     .col-container
       .col1
         zeroxInstant
-        .org-name {{ orgName }}
-        .shareholder shareholder? {{ userIsShareholder }}
+        //- .shareholder shareholder? {{ userIsShareholder }}
         .total-slices Total Slices: {{ orgTotalSlices }}
-
         .pie-info
           pie.pie(:data="pieChartData")
-          ul.slice-holders
-            li(v-for='holder in orgSliceHolders')
-              //- | {{ holder.address.substr(0,6) }}..{{ holder.address.substr(-4) }} - {{ holder.numSlices }}
-              | {{ holder.address }} - {{ holder.numSlices }}
-              | {{ (holder.numSlices / orgTotalSlices * 100).toFixed() }}%
+          div
+            h3 Company Shareholders
+            ul.slice-holders
+              li(v-for='holder in orgSliceHolders')
+                //- | {{ holder.address.substr(0,6) }}..{{ holder.address.substr(-4) }} - {{ holder.numSlices }}
+                | {{ holder.address }} - {{ holder.numSlices }}
+                span.percent
+                  | {{ (holder.numSlices / orgTotalSlices * 100).toFixed() }}%
 
         .balance
-          .pot-balance  Pot Balance
+          .pot-balance Company Shared Pot
           .eth-balance {{ balances.ETH }} ETH
       //- .col2
 
@@ -35,19 +36,20 @@ layout#page-company(
             i no current proposals to vote on
 
           .proposal(v-for='proposal in currentProposals' :key='`p-${proposal.id}`')
-            .description
+            .text
               template(v-if='proposal.type === 0')
                 .action-name Issue Slices
-                div
+                .action-details
                   span.amount {{ proposal.amount }} slices
                   span= ' to '
                   span.address {{ proposal.address.substr(-4) }}
                 .description {{ proposal.description }}
               template(v-if='proposal.type === 1')
                 .action-name Disperse Dividends
+                .description {{ proposal.description }}
               template(v-if='proposal.type === 2')
                 .action-name Spend ETH
-                div
+                .action-details
                   span.amount {{ proposal.amount }} ETH
                   span= ' to '
                   span.address {{ proposal.address.substr(-4) }}
@@ -65,23 +67,25 @@ layout#page-company(
         .completed-proposals
           h3 Completed Proposals
           .proposal(v-for='proposal in completedProposals')
-            icon(:name='proposal.result ? "check" : "times"')
-            template(v-if='proposal.type === 0')
-              .action-name Issue Slices
-              div
-                span.amount {{ proposal.amount }} slices
-                span= ' to '
-                span.address {{ proposal.address.substr(-4) }}
-              .description {{ proposal.description }}
-            template(v-if='proposal.type === 1')
-              .action-name Disperse Dividends
-            template(v-if='proposal.type === 2')
-              .action-name Spend ETH
-              div
-                span.amount {{ proposal.amount }} ETH
-                span= ' to '
-                span.address {{ proposal.address.substr(-4) }}
-              .description {{ proposal.description }}
+            icon.result(:name='proposal.result ? "check-circle" : "times-circle"')
+            .text
+              template(v-if='proposal.type === 0')
+                .action-name Issue Slices
+                .action-details
+                  span.amount {{ proposal.amount }} slices
+                  span= ' to '
+                  span.address {{ proposal.address.substr(-4) }}
+                .description {{ proposal.description }}
+              template(v-if='proposal.type === 1')
+                .action-name Disperse Dividends
+                .description {{ proposal.description }}
+              template(v-if='proposal.type === 2')
+                .action-name Spend ETH
+                .action-details
+                  span.amount {{ proposal.amount }} ETH
+                  span= ' to '
+                  span.address {{ proposal.address.substr(-4) }}
+                .description {{ proposal.description }}
 
   popup(
     ref='proposalPopup'
@@ -111,17 +115,20 @@ layout#page-company(
       form-input(
         v-model='proposal.spendAddress'
         label='Where to send funds'
+        instructions='eth address'
         required
       )
       form-input(
         v-model='proposal.spendAmount'
         label='Spend amount'
+        instructions='in ETH'
         required
       )
     form-row(v-if='proposal.type === "ISSUE_SLICES"')
       form-input(
         v-model='proposal.mintRecipient'
         label='To who'
+        instructions='eth address'
         required
       )
       form-input(
@@ -169,6 +176,7 @@ export default {
   computed: {
     ...mapState({
       ethersConnected: state => state.ethers.connected,
+      userAddress: state => state.ethers.address,
     }),
     ...mapState(['orgName', 'orgAddress']),
     ...mapGetters([
@@ -255,7 +263,7 @@ export default {
 
   position: absolute;
   top: 100px;
-  bottom: 100px;
+  bottom: 0px;
   left: 0;
   right: 0;
   display: flex;
@@ -289,6 +297,10 @@ export default {
 
 .slice-holders {
   margin-left: 0.5rem;
+  .percent {
+    margin-left: 10px;
+    color: #AAA;
+  }
 }
 
 .current-proposals {
@@ -301,7 +313,7 @@ export default {
     display: flex;
     margin-bottom: 5px;
   }
-  .description {
+  .text {
     flex: 1 0 0;
   }
   .buttons {
@@ -356,19 +368,37 @@ export default {
 }
 
 .completed-proposals {
+  margin-top: 30px;
   .proposal {
     display: flex;
     margin-bottom: 5px;
   }
 }
+.proposal {
+  .result {
+    margin-right: 10px;
+  }
+  .action-name {
+    font-weight: bold;
+  }
+  .action-details {
 
-.org-name {
+  }
+  .description {
+    font-style: italic;
+  }
+}
+
+
+.total-slices {
+  font-weight: bold;
   font-size: 30px;
-  margin-bottom: 1rem
+  line-height: 1.4em;
+  margin-bottom: 15px;
 }
 
 .pot-balance {
-  margin-top: 1.2rem;
+  margin-top: 2rem;
   font-size: 25px;
   margin-bottom: 0.75rem;
 }

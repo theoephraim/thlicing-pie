@@ -1,14 +1,25 @@
 <template lang='pug'>
 layout#page-home
-  .home
-    h2 A Slice of DAO is a universal, one-size-fits all model that creates a perfectly fair equity split in an early-stage, bootstrapped start-up company.
-    h3 on the Ethereum blockchain
+  .value-prop
+    h2
+      | The Slicing Pie equity-splitting system as a DAO
+      br
+    ul.benefits
+      li Issue tokens to fairly track early contributions towards your project
+      li Use token ownership to control governance of the project
+      li Give shareholders instant liquidity on the blockchain
 
   .create
     create-company
 
   .donate
-    v-button.chic-black(@click='openWyre') Donate to this project!
+    div
+      v-button.chic-black(@click='openWyre') Donate to this project!
+    .dogfood
+      | We manage these funds using Slice of DAO!
+    .links
+      a.github-logo(href='https://github.com/theoephraim/thlicing-pie', target="_blank")
+        github-logo
 </template>
 
 <script>
@@ -18,6 +29,7 @@ const components = {
   layout: require('@/components/layout').default,
   createCompany,
   logo: require('@/assets/images/logo.svg?inline').default,
+  'github-logo': require('@/assets/images/github.svg?inline').default,
 };
 
 export default {
@@ -64,9 +76,17 @@ export default {
 </script>
 
 <style lang='less'>
-.home {
+.value-prop {
   padding: 2rem 9%;
   color: white;
+  text-align: center;
+  h2 {}
+  .benefits {
+    list-style: none;
+    margin-top: 10px;
+      font-size: 18px;
+      line-height: 1.3em;
+  }
 }
 
 .create-new {
@@ -77,14 +97,40 @@ export default {
 
 .donate {
   margin-top: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 }
 
+.dogfood {
+  vertical-align: middle;
+  line-height: 20px;
+  font-style: italic;
+  font-size: 11px;
+  text-align: center;
+  padding-top: 5px;
+  color: white;
+}
 .create-company {
   padding: 1% 3%;
 }
 
+.github-logo {
+  width: 50px;
+  height: 50px;
+  color: white;
+  &:hover {
+    color: @brand-color;
+  }
+
+  svg {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    fill: currentColor;
+  }
+}
+
+.links {
+  padding: 20px 0;
+}
 
 </style>

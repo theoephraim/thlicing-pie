@@ -9,11 +9,6 @@
       .org-address {{ orgAddress }}
   .main
     slot
-  footer.footer
-    div
-      .dogfood We manage these funds using Slice of DAO!
-    a.github-logo(href='https://github.com/theoephraim/thlicing-pie', target="_blank")
-      github-logo
 </template>
 
 <script>
@@ -21,7 +16,6 @@ const components = {
   logo: require('@/assets/images/logo.svg?inline').default,
   'facebook-logo': require('@/assets/images/facebook.svg?inline').default,
   'instagram-logo': require('@/assets/images/instagram.svg?inline').default,
-  'github-logo': require('@/assets/images/github.svg?inline').default,
 };
 
 export default {
@@ -57,8 +51,7 @@ export default {
     .org-name {
       color: @brand-color;
       display: block;
-      margin: 0;
-      margin-top: 10px;
+      margin: 10px 0 5px;
       font-size: 32px;
     }
     .org-address {
@@ -104,27 +97,6 @@ export default {
   padding: 20px;
   display: flex;
   justify-content: space-evenly;
-  .dogfood {
-    vertical-align: middle;
-    line-height: 40px;
-    font-style: italic;
-    font-size: 11px;
-    text-align: center;
-    padding-top: 5px;
-    color: white;
-
-  }
-}
-
-.github-logo {
-  width: 50px;
-  height: 50px;
-  svg {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    filter: invert(100%);
-  }
 }
 
 </style>
