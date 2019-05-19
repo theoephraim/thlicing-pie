@@ -135,4 +135,7 @@ export default {
   }
 }
 
+.half-width {
+  width: 40%;
+}
 </style>
