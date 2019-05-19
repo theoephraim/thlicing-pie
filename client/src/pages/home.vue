@@ -1,20 +1,21 @@
 <template lang='pug'>
 layout#page-home
-  p Welcome to Thlicing Pie!
+  .home
+    h2 A Slice of DAO is a universal, one-size-fits all model that creates a perfectly fair equity split in an early-stage, bootstrapped start-up company.
+    h3 on the Ethereum blockchain
 
-  h2 THlicing Pie is a universal, one-size-fits all model that creates a perfectly fair equity split in an early-stage, bootstrapped start-up company.
-  h3 on the Ethereum blockchain
+  .create
+    create-company
 
-
-  v-button(to-named-route='create') Create A New Company
-  v-button(@click='') Donate to this project!
 </template>
 
 <script>
-import _ from 'lodash';
+import createCompany from './create-company.vue';
 
 const components = {
   layout: require('@/components/layout').default,
+  createCompany,
+  logo: require('@/assets/images/logo.svg?inline').default,
 };
 
 export default {
@@ -39,5 +40,26 @@ export default {
 </script>
 
 <style lang='less'>
+.home {
+  padding: 2rem 3rem;
+  color: white;
+}
+
+.create-new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-company {
+  padding: 2rem 3rem;
+}
+
 
 </style>

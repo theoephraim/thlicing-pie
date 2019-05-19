@@ -443,9 +443,9 @@ export default {
 
 <style lang='less'>
 
-@error-red-text: rgb(88, 8, 8);
-@error-red-border: rgb(88, 8, 8);
-@error-red-bg: rgb(88, 8, 8);
+@error-red-text: rgb(254, 27, 7);
+@error-red-border: rgb(254, 27, 7);
+@error-red-bg: rgb(254, 27, 7);
 
 .form-input {
   &.is-focused {
@@ -479,6 +479,7 @@ export default {
     width: 13px;
     height: 13px;
   }
+
 }
 .form-input-input {
   box-sizing: border-box;
@@ -606,5 +607,11 @@ export default {
   .button { width: 100%; }
 }
 
-
+.chic-black {
+  input {
+    background-color: white !important;
+    color: black;
+    border-radius: 3px;
+  }
+}
 </style>
