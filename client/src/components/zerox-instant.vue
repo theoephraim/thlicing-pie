@@ -7,8 +7,14 @@
     )
       form-row(no-inputs)
         p You can be a part of our company. Click the button below to buy our tokens and to claim your slice of our pie!
-      div.button-area
-        button.zerox-instant(@click='renderZeroExInstant') Click here to buy now
+      form-row(no-inputs v-if="userBalance==='0.0'")
+        p You don't have any ethereum, buy some first!
+        div.button-area
+          button.zerox-instant(@click='openWyre') Click here to buy now
+      form-row(no-inputs v-if="userBalance!=='0.0'")
+        p Trade your eth for some of our tokens!
+        div.button-area
+          button.zerox-instant(@click='renderZeroExInstant') Click here to trade now
 </template>
 
 <script>
@@ -31,10 +37,11 @@ export default {
     coinToBuyAddress() {
       return this.$route.params.companyAddress;
     },
-    ...mapGetters(['userIsShareholder']),
+    ...mapGetters(['userIsShareholder', 'userBalance']),
   },
   methods: {
     renderZeroExInstant() {
+      console.log(this.ethers);
       this.closeInfoPopup();
       console.log({ cba: this.coinToBuyAddress });
       const assetData = window.zeroExInstant.assetDataForERC20TokenAddress(this.coinToBuyAddress);
@@ -73,6 +80,23 @@ export default {
         },
         'body',
       );
+    },
+    openWyre() {
+      const userAddress = this.user;
+      this.wyreWidget = new window.Wyre.Widget({
+        env: 'test',
+        accountId: 'AK-T7RJM3TT-LW7FTE76-BX7AWCBL-UU8H6XXJ',
+        auth: { type: 'metamask' },
+        operation: {
+          type: 'debitcard',
+          dest: `ethereum:${userAddress}`,
+          sourceCurrency: 'USD',
+          destCurrency: 'ETH',
+          destAmount: 0.05,
+        },
+      });
+
+      this.wyreWidget.open();
     },
     showInfoPopup() {
       this.$refs.investorInfoPopup.open();
