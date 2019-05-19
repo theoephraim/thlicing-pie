@@ -88,6 +88,7 @@ export default new Vuex.Store({
       try {
         console.log('deploying contract');
         const connectedFactory = genericContractFactory.connect(getWallet());
+        console.log('connected', connectedFactory);
         contract = await connectedFactory.deploy(companyProps.name);
         console.log('deploy 1');
         await contract.deployed();

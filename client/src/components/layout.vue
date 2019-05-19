@@ -3,7 +3,7 @@
   .header-bar
     router-link.main-logo(to='/')
       logo
-      h1 SliceDAO
+      h1 Slice of DAO
 
   slot
   footer.footer
