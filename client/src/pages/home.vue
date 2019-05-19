@@ -43,7 +43,7 @@ export default {
 
 <style lang='less'>
 .home {
-  padding: 2rem 3rem;
+  padding: 2rem 14rem;
   color: white;
 }
 

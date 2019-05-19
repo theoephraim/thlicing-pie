@@ -11,15 +11,17 @@ layout#page-company()
         .org-name {{ orgName }}
         .total-slices Total Slices: {{ orgTotalSlices }}
 
-        pie.pie(:data="pieChartData")
-        ul.slice-holders
-          li(v-for='holder in orgSliceHolders')
-            | {{ holder.address.substr(0,6) }}..{{ holder.address.substr(-4) }} - {{ holder.numSlices }}
+        .pie-info
+          pie.pie(:data="pieChartData")
+          ul.slice-holders
+            li(v-for='holder in orgSliceHolders')
+              //- | {{ holder.address.substr(0,6) }}..{{ holder.address.substr(-4) }} - {{ holder.numSlices }}
+              | {{ holder.address }} - {{ holder.numSlices }}
 
         .balance
-          h3 Pot Balance
+          .pot-balance  Pot Balance
           .eth-balance {{ balances.ETH }} ETH
-      .col2
+      //- .col2
 
       .col3
         .current-proposals
@@ -141,6 +143,11 @@ export default {
   metaInfo() {
     return {
       title: 'Manage company',
+      script: [
+        {
+          src: 'https://verify.sendwyre.com/js/widget-loader.js',
+        },
+      ],
     };
   },
   props: {
@@ -185,6 +192,8 @@ export default {
 
     },
   },
+  mounted() {
+  },
   data() {
     return {
       proposal: {},
@@ -206,6 +215,22 @@ export default {
     tryVote(proposalId, vote) {
       this.$store.dispatch('voteOnProposal', { proposalId, vote });
     },
+    openWyre() {
+      this.wyreWidget = new window.Wyre.Widget({
+        env: 'test',
+        accountId: 'AK-T7RJM3TT-LW7FTE76-BX7AWCBL-UU8H6XXJ',
+        auth: { type: 'metamask' },
+        operation: {
+          type: 'debitcard',
+          dest: 'ethereum:0x4b8f33d96fE99e80bE83bA9Ab2089A900e9f01CD',
+          sourceCurrency: 'USD',
+          destCurrency: 'ETH',
+          destAmount: 0.05,
+        },
+      });
+
+      this.wyreWidget.open();
+    },
   },
 };
 </script>
@@ -219,7 +244,7 @@ export default {
 
   position: absolute;
   top: 100px;
-  bottom: 0;
+  bottom: 100px;
   left: 0;
   right: 0;
   display: flex;
@@ -231,18 +256,28 @@ export default {
     position: relative;
   }
   .col1 {
+    flex: 2 0 0;
     background: #eee;
   }
   .col3 {
-    background: #eee;
+    background: #d6d6d6;
   }
 
   .pie {
-    width: 300px;
+    margin-left: 1rem;
+    width: 25vw;
   }
 
 
   h2 { margin: 0;}
+}
+
+.pie-info {
+  display: flex;
+}
+
+.slice-holders {
+  margin-left: 0.5rem;
 }
 
 .current-proposals {
@@ -316,5 +351,18 @@ export default {
   }
 }
 
+.org-name {
+  font-size: 30px;
+  margin-bottom: 1rem
+}
 
+.pot-balance {
+  margin-top: 1.2rem;
+  font-size: 25px;
+  margin-bottom: 0.75rem;
+}
+
+.eth-balance {
+  margin-left: 0.75rem;
+}
 </style>
