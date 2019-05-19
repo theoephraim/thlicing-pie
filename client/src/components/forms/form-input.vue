@@ -535,6 +535,7 @@ export default {
 
   &::placeholder {
     color: #BBB;
+    font-style: italic;
   }
 
   &:focus {

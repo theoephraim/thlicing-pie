@@ -67,11 +67,12 @@ export default {
 
 .main {
   min-height: 80vh;
-  background-color: black
+  height: 100%;
+  background-color: #171717;
 }
 
 .footer {
-  background: #000;
+  background: #171717;
   width: 100%;
   height: 100px;
   padding: 20px;

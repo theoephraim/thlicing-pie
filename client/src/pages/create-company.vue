@@ -9,7 +9,7 @@
     form-row
       form-input.chic-black(
         v-model='company.name'
-        label='Company Name'
+        placeholder='Your Company Name...'
         required required-message='What is your company called?'
       )
     form-row
