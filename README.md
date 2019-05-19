@@ -23,3 +23,4 @@ Truffle
 Vue
 ethers.js
 0x
+Wyre
