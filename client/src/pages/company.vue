@@ -7,6 +7,7 @@ layout#page-company()
   div(v-else)
     .col-container
       .col1
+        zeroxInstant
         .org-name {{ orgName }}
         .total-slices Total Slices: {{ orgTotalSlices }}
 
@@ -130,6 +131,7 @@ const { vuelidateGroupMixin } = require('@/lib/vuelidate-group');
 const components = {
   layout: require('@/components/layout').default,
   pie: require('@/components/pie').default,
+  zeroxInstant: require('@/components/zerox-instant').default,
 };
 
 
