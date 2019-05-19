@@ -77,8 +77,8 @@ contract PieOrg is ERC20, ERC20Detailed {
             }
         }
         uint totalVotes = totalSupply();
-        uint yesPercent = SafeMath.div(yesVotes, totalVotes);
-        uint noPercent = SafeMath.div(noVotes, totalVotes);
+        uint yesPercent = SafeMath.div(yesVotes*100, totalVotes);
+        uint noPercent = SafeMath.div(noVotes*100, totalVotes);
         if (yesPercent >= yesThreshold) {
             _succeedProposal(proposalID);
         }
