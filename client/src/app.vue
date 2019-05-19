@@ -15,6 +15,11 @@ export default {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Oxygen' },
     ],
     script: [
+      {
+        src: 'https://app.tor.us/embed.min.js',
+        integrity: 'sha384-c32GoNraGoesDeDGrz7twnQIHjtZlaFglOz/N+tSqtBt1xXwd0dCuDxJWaEH1o3m',
+        crossorigin: 'anonymous',
+      },
     ],
   },
   mounted() {

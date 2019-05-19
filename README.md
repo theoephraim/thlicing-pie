@@ -1,25 +1,31 @@
 # Slice of DAO
 
-### A Slice of DAO is a universal, one-size-fits all model that creates a perfectly fair equity split in an early-stage, bootstrapped start-up company.
+### Slicing Pie implemented as a DAO - issue tokens to fairly track contributions towards a project (money and otherwise) while using token ownership to control governance of the project
+## Inspiration
 
-Calculating everyone's fair share of the equity in a startup can be complicated. A Slice of DAO makes this automatic, fair and easy to use.
+[Slicing Pie](https://slicingpie.com/) is a system that many startups and projects have used to track contributions in order to calculate a fair equity split. Currently people do this using a spreadsheet or a proprietary web app, with a single administrator/founder in total control.
 
-Based on the [Slicing Pie](https://slicingpie.com/) formula, Slicing the DAO keeps track and calculates each shareholders % share of the equity based on their at-risk contributions. 
+By putting this system onto the blockchain, we can:
+- give all shareholders transparency into how shares are issued
+- use the ownership of these shares to create a DAO that can make decisions together
+- give the company a shared "bank account" that can be controlled by the DAO to spend money or issue dividends to shareholders
+- create instant liquidity for shareholders by allowing them sell their shares back to the organization or to outside investors
 
-At-risk contributions include time and money contributions to your company.
+## What it does
 
-New shareholders can join a company either by being issued new shares/slices of the organisation or if they buy some available shares of the company.
+Each share (called a "slice") represents the contribution of $1 (or equivalent) to the company.
 
-Company shareholders can make new proposals to mint new tokens to a certain individual (to reimburse them for expenses outside of the blockchain such as for hours of work contributed to the organisation), they can make proposals to spend company assets and finally they can make proposals to pay out dividends to a shareholder.
+- Contributions can be money - putting money into the shared pot, covering off-chain expenses.
+- Contributions can be time - valued at the user's fair market rate.
+- Contributions can be anything - ideas, relationships, rent, mileage on a car, etc.
 
-Shareholders then vote 'yes' or 'no' on each proposal, the proportion of each shareholder's vote is the same as the proportion of their share of the company pie. Once the share of the votes has reached 70% in either yes or no the proposal is accepted or rejected.
+We track these "slices" as ERC20 tokens in a smart contract that also provides governance mechanisms to the shareholders.
 
-Slice of DAO leverages 0x-Instant to enable current shareholders to sell their shares and thereby allowing new investors to become part of the organisation.
+Shareholders can create proposals to issue shares to current shareholders or new contributors. In the future, some types proposals could be automated using time tracking software and evidence could be attached.
+Shareholders then vote to approve or reject each proposal, with their "voting power" equal to their proportional share of the company pie (the total number of shares). Once the share of the votes has reached a certain threshold of approval (currently 70%) or the opposite rejection (30%), the outcome of the proposal is reached. If approved, the shares are issued. It is still up to the shareholders to evaluate the proposals fairly and be good citizens of the organization, but this removes total control from a single point of control and lets all shareholders have input.
 
-### Built With
+Additionally, the company contract has a shared pool of funds. It could be funded by shareholders, donations, or by actual revenue flowing into the company. Users can make proposals to spend out of this pot, or to issue dividends to all shareholders. If a dividend proposal is approved, the entire pot is split according to the current shareholder percentages.
 
-Solidity
-Truffle
-Vue
-ethers.js
-0x
+Lastly, shareholders can at any time "burn" tokens and sell their shares back to the company in exchange for money from the pot. This lets them extract their share at a 1:1 ratio to at least get their contribution back.
+
+If everything is going well and there is additional speculative value more than the current sum of shares, they could also ask other shareholders or outside investors to purchase their shares at a higher value.
