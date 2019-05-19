@@ -10,6 +10,7 @@
     div
       .donate
         v-button.chic-black(@click='') Donate to this project!
+      .dogfood We manage these funds using Slice of DAO!
 </template>
 
 <script>
@@ -76,6 +77,15 @@ export default {
   width: 100%;
   height: 100px;
   padding: 20px;
+  .dogfood {
+    font-style: italic;
+    font-size: 11px;
+    text-align: center;
+    padding-top: 5px;
+    color: white;
+
+  }
 }
+
 
 </style>

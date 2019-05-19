@@ -31,6 +31,7 @@ layout#page-company()
                   span.amount {{ proposal.amount }} slices
                   span= ' to '
                   span.address {{ proposal.address.substr(-4) }}
+                .description {{ proposal.description }}
               template(v-if='proposal.type === 1')
                 .action-name Disperse Dividends
               template(v-if='proposal.type === 2')
@@ -39,6 +40,7 @@ layout#page-company()
                   span.amount {{ proposal.amount }} ETH
                   span= ' to '
                   span.address {{ proposal.address.substr(-4) }}
+                .description {{ proposal.description }}
             .buttons(:class='`voted-${proposal.myVote}`')
               .vote-yes.vote-button(@click='tryVote(proposal.id, true)')
                 icon(name='check')
@@ -55,6 +57,7 @@ layout#page-company()
                 span.amount {{ proposal.amount }} slices
                 span= ' to '
                 span.address {{ proposal.address.substr(-4) }}
+              .description {{ proposal.description }}
             template(v-if='proposal.type === 1')
               .action-name Disperse Dividends
             template(v-if='proposal.type === 2')
@@ -63,6 +66,7 @@ layout#page-company()
                 span.amount {{ proposal.amount }} ETH
                 span= ' to '
                 span.address {{ proposal.address.substr(-4) }}
+              .description {{ proposal.description }}
 
   popup(
     ref='proposalPopup'
@@ -82,6 +86,12 @@ layout#page-company()
         form-input-option(value='DIVIDENDS') Issue dividends to shareholders
         form-input-option(value='SPEND') Spend from the company pot
         form-input-option(value='ISSUE_SLICES') Issue slices to someone
+    form-row
+      form-input(
+        v-model='proposal.description'
+        label='Description' :max-length='32'
+        required
+      )
     form-row(v-if='proposal.type === "SPEND"')
       form-input(
         v-model='proposal.spendAddress'

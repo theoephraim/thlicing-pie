@@ -123,7 +123,7 @@ export default new Vuex.Store({
         amount = proposal.mintAmount;
       }
 
-      const result = await contract.makeProposal(address, amount, 'DESCRIPTION', action);
+      const result = await contract.makeProposal(address, amount, ethers.utils.formatBytes32String(proposal.description), action);
       console.log(result);
       ctx.dispatch('refreshProposals');
     },
@@ -133,7 +133,7 @@ export default new Vuex.Store({
       console.log(rawProposals);
       const proposals = [];
       for (let i = 0; i < rawProposals[0].length; i++) {
-        const actionType = rawProposals[2][i].toNumber();
+        const actionType = rawProposals[3][i].toNumber();
         proposals.push({
           id: i,
           address: rawProposals[0][i],
@@ -143,13 +143,14 @@ export default new Vuex.Store({
           ...actionType === ACTION_TYPES.ISSUE_SLICES && {
             amount: rawProposals[1][i].toNumber(),
           },
-          type: rawProposals[2][i].toNumber(),
-          result: rawProposals[3][i] ? rawProposals[4][i] : undefined,
+          description: ethers.utils.parseBytes32String(rawProposals[2][i]),
+          type: actionType,
+          result: rawProposals[4][i] ? rawProposals[4][i] : undefined,
           myVote: {
             0: null,
             1: false,
             2: true,
-          }[rawProposals[5][i].toNumber()],
+          }[rawProposals[6][i].toNumber()],
         });
       }
 
@@ -182,6 +183,7 @@ export default new Vuex.Store({
       ctx.commit('SET_PROPOSALS', proposals);
     },
     refreshSliceHolders: async (ctx) => {
+      console.log('moo');
       const rawBalances = await contract.getTrackedAccounts();
       console.log('RAW', rawBalances);
       const balances = [];
