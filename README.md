@@ -1,6 +1,6 @@
 # Slice of DAO
 
-A Slice of DAO is a universal, one-size-fits all model that creates a perfectly fair equity split in an early-stage, bootstrapped start-up company.
+### A Slice of DAO is a universal, one-size-fits all model that creates a perfectly fair equity split in an early-stage, bootstrapped start-up company.
 
 Calculating everyone's fair share of the equity in a startup can be complicated. A Slice of DAO makes this automatic, fair and easy to use.
 
@@ -16,6 +16,6 @@ Shareholders then vote 'yes' or 'no' on each proposal, the proportion of each sh
 
 Slice of DAO leverages 0x-Instant to enable current shareholders to sell their shares and thereby allowing new investors to become part of the organisation.
 
-# Built With
+### Built With
 
 Solidity Truffle Vue 0x ethers.js
