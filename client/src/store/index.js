@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import _ from 'lodash';
-import { Contract, ContractFactory } from 'ethers';
+import { Contract, ContractFactory, ethers } from 'ethers';
 
 import { getWallet, getProvider } from './ethers/ethersConnect';
 
@@ -12,6 +12,9 @@ const genericContractFactory = new ContractFactory(PIE_CONTRACT.abi, PIE_CONTRAC
 Vue.use(Vuex);
 
 let contract;
+
+console.log('PARSE', ethers.utils.parseEther('1'));
+
 
 const DAI_CONTRACT_ADDRESS = '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359';
 const DAI_ABI = [{
@@ -52,16 +55,13 @@ export default new Vuex.Store({
     currentProposals: (state, getters) => _.filter(getters.allProposals, p => p.result === undefined),
     completedProposals: (state, getters) => _.filter(getters.allProposals, p => p.result !== undefined),
     allProposals: state => state.proposals,
+    balances: state => state.potBalance,
   },
   actions: {
     connectToCompany: async (ctx, contractAddress) => {
       ctx.commit('SET_COMPANY_ADDRESS', contractAddress);
       const connectedFactory = genericContractFactory.connect(getWallet());
       contract = connectedFactory.attach(contractAddress);
-
-      console.log(contract);
-
-      ctx.commit('SET_POT_TOKEN_BALANCE', 'ETH', contract.balance);
 
       ctx.commit('SET_ORG_NAME', await contract.orgName());
 
@@ -88,9 +88,17 @@ export default new Vuex.Store({
 
     refreshPotBalance: async (ctx) => {
       const web3 = getProvider();
-      const ethBalance = await web3.getBalance(ctx.state.orgAddress);
-      console.log(ethBalance);
-      ctx.commit('SET_POT_TOKEN_BALANCE', 'ETH', ethBalance);
+      const balance = await web3.getBalance(ctx.state.orgAddress);
+
+      const ethBalance = ethers.utils.formatUnits(balance, 'ether');
+
+      // const ethBalance = web3.utils.fromWei(weiBalance, 'ether');
+      console.log(`${ethBalance} ETH`);
+
+      // console.log('balance', ethBalance.toNumber());
+      ctx.commit('SET_POT_TOKEN_BALANCE', {
+        token: 'ETH', balance: ethBalance,
+      });
 
       // enable when not running locally
 
@@ -107,7 +115,8 @@ export default new Vuex.Store({
         // nothing
       } else if (proposal.type === 'SPEND') {
         address = proposal.spendAddress;
-        amount = proposal.spendAmount;
+        // convert amount to wei
+        amount = ethers.utils.parseEther(proposal.spendAmount);
       } else if (proposal.type === 'ISSUE_SLICES') {
         action = 0;
         address = proposal.mintRecipient;
@@ -124,10 +133,16 @@ export default new Vuex.Store({
       console.log(rawProposals);
       const proposals = [];
       for (let i = 0; i < rawProposals[0].length; i++) {
+        const actionType = rawProposals[2][i].toNumber();
         proposals.push({
           id: i,
           address: rawProposals[0][i],
-          amount: rawProposals[1][i].toNumber(),
+          ...actionType === ACTION_TYPES.SPEND && {
+            amount: ethers.utils.formatUnits(rawProposals[1][i], 'ether'),
+          },
+          ...actionType === ACTION_TYPES.ISSUE_SLICES && {
+            amount: rawProposals[1][i].toNumber(),
+          },
           type: rawProposals[2][i].toNumber(),
           result: rawProposals[3][i] ? rawProposals[4][i] : undefined,
           myVote: {
@@ -168,6 +183,7 @@ export default new Vuex.Store({
     },
     refreshSliceHolders: async (ctx) => {
       const rawBalances = await contract.getTrackedAccounts();
+      console.log('RAW', rawBalances);
       const balances = [];
       for (let i = 0; i < rawBalances[0].length; i++) {
         balances.push({
@@ -189,7 +205,7 @@ export default new Vuex.Store({
     SET_ORG_NAME: (state, name) => {
       state.orgName = name;
     },
-    SET_POT_TOKEN_BALANCE: (state, token, balance) => {
+    SET_POT_TOKEN_BALANCE: (state, { token, balance }) => {
       Vue.set(state.potBalance, token, balance);
     },
     SET_SLICE_HOLDERS: (state, balances) => {

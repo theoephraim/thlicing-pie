@@ -23,7 +23,7 @@ contract PieOrg is ERC20, ERC20Detailed {
     struct Proposal {
         address toAddress;
         uint amount;
-        string metadata;
+        bytes32 metadata;
         uint proposalType;
         bool complete;
         bool success;
@@ -49,7 +49,7 @@ contract PieOrg is ERC20, ERC20Detailed {
         _;
     }
 
-    function makeProposal(address toAddress, uint256 amount, string memory metadata, uint proposalType) public onlyMember returns (uint) {
+    function makeProposal(address toAddress, uint256 amount, bytes32 metadata, uint proposalType) public onlyMember returns (uint) {
         return proposals.push(Proposal(toAddress, amount, metadata, proposalType, false, false));
     }
 
@@ -156,7 +156,7 @@ contract PieOrg is ERC20, ERC20Detailed {
     function getProposals() public view returns(
         address[] memory,
         uint[] memory,
-        // string[] memory,
+        bytes32[] memory,
         uint[] memory,
         bool[] memory,
         bool[] memory,
@@ -164,7 +164,7 @@ contract PieOrg is ERC20, ERC20Detailed {
         uint allProposalsLength = getProposalsLength();
         address[] memory allProposalToAddresses = new address[](allProposalsLength);
         uint[] memory allProposalAmounts = new uint[](allProposalsLength);
-        string[] memory allProposalMetadatas = new string[](allProposalsLength);
+        bytes32[] memory allProposalMetadatas = new bytes32[](allProposalsLength);
         uint[] memory allProposalTypes = new uint[](allProposalsLength);
         bool[] memory allProposalCompletes = new bool[](allProposalsLength);
         bool[] memory allProposalSuccesses = new bool[](allProposalsLength);
@@ -187,7 +187,7 @@ contract PieOrg is ERC20, ERC20Detailed {
             }
             allProposalMyVote[i] = myVote;
         }
-        return (allProposalToAddresses, allProposalAmounts,
+        return (allProposalToAddresses, allProposalAmounts, allProposalMetadatas,
             allProposalTypes, allProposalCompletes, allProposalSuccesses, allProposalMyVote);
     }
 
