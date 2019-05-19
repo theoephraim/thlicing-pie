@@ -4,20 +4,16 @@
     router-link.main-logo(to='/')
       logo
       h1 Slice of DAO
-<<<<<<< Updated upstream
-
-    a.github-logo(href='https://github.com/theoephraim/thlicing-pie', target="_blank")
-      github-logo
-=======
     .org-info
       h2.org-name {{ orgName }}
       .org-address {{ orgAddress }}
->>>>>>> Stashed changes
   .main
     slot
   footer.footer
     div
       .dogfood We manage these funds using Slice of DAO!
+    a.github-logo(href='https://github.com/theoephraim/thlicing-pie', target="_blank")
+      github-logo
 </template>
 
 <script>

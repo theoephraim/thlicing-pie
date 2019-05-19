@@ -199,8 +199,6 @@ export default {
       }
     },
   },
-  mounted() {
-  },
   data() {
     return {
       proposal: {},
